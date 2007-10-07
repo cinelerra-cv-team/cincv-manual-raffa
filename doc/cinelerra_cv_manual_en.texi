@@ -15,7 +15,7 @@
 @documentencoding ISO-8859-1
 @settitle Cinelerra CV Manual
 @afourpaper
-@set EDITION 1.49.EN
+@set EDITION 1.50.EN
 @set VERSION 2.1
 
 @finalout
@@ -537,11 +537,11 @@ to add the @option{-j 3} option to make in order to benefit from the available
 CPUs.
 @item @b{For x86 CPUs only}:@*
 You probably want to enable MMX support.  To do that, run @command{./configure}
-with the @option{--enable-mmx} option.  If you do that, you may have to use the
+with the @option{--enable-mmx32} option.  If you do that, you may have to use the
 @option{--without-pic} option too, otherwise, compilation may fail.
 @item @b{For Pentium-M:}@*
 Here are some useful compiler flags:@*
-@command{./configure --prefix=/usr --enable-x86 --enable-mmx --enable-freetype2
+@command{./configure --prefix=/usr --enable-x86 --enable-mm32x --enable-freetype2
 --with-buildinfo=svn/recompile CFLAGS='-O3 -pipe -fomit-frame-pointer
 -funroll-all-loops -falign-loops=2 -falign-jumps=2 -falign-functions=2
 -ffast-math -march=pentium-m -mfpmath=sse,387 -mmmx -msse'}
@@ -704,6 +704,17 @@ Valentina @sc{Messeri} built also
 @command{@w{deb http://giss.tv/~vale/debian64/ ./}}
 @end itemize
 
+Christian @sc{Marillat} makes binary Debian packages, built from the unofficial SVN 
+releases, for stable, testing and unstable.
+@itemize @bullet
+@item @b{Apt source for amd64, hppa, i386, ia64, powerpc (not optimized):}@*
+@command{@w{deb http://www.debian-multimedia.org BRANCH main}}
+@end itemize	
+
+@b{Note:} BRANCH = stable, testing or unstable@*
+@b{Note:} Install @b{debian-multimedia-keyring} to add in your keyring Marillat's
+gpg-key.
+
 @b{Note:} If Cinelerra produces the following error:@*
 @command{cinelerra: relocation error: /usr/lib/libavcodec.so.0.4.8: undefined symbol: 
 faacDecOpen}@*
@@ -765,13 +776,6 @@ You need some prerequisites which are not found in Debian's official
 repositories.  You should add in your @file{/etc/apt/sources.list} the following
 line, which is Christian Marillat's repository:@*
 @command{deb http://www.debian-multimedia.org/ sid main}
-
-In order to use the mirror you need to add in your gpg keyring Marillat's
-gpg-key:@*
-@command{gpg --keyserver hkp://wwwkeys.eu.pgp.net --recv-keys 1F41B907}@*
-@command{gpg --armor --export 1F41B907 | sudo apt-key add -}@*
-If you do not use sudo, do the following under root:@*
-@command{gpg --armor --export 1F41B907 | apt-key add -}
 
 You will need to apt-get install the following packages:
 
@@ -3164,14 +3168,17 @@ Labels can reposition the insertion point when they are selected but they can
 also be traversed with the @image{manual_images_intl/label_traversal,15mm} @b{label
 traversal} buttons.  When a label is out of view, the label traversal buttons
 reposition the timeline so the label is visible.  There are keyboard shortcuts
-for label traversal, too.
+for label traversal, too. 
 
 @b{CTRL-LEFT} repositions the insertion point on the previous label.
 
 @b{CTRL-RIGHT} repositions the insertion point on the next label.
 
-With label traversal you can quickly seek back and forth on the timeline but you 
-can also select regions.
+With label traversal you can quickly seek back and forth on the timeline.
+The @b{Label} tab of the resources window lists the timestamp of every label.
+You can edit the label list and add a title for every item using the popup menu.
+
+With labels you can also select regions.
 
 @b{SHIFT-CTRL-LEFT} highlights the region between the insertion point and the
 previous label.
@@ -8464,6 +8471,16 @@ can be used to insert that information:
 cat input_file.flv | flvtool2 -U stdin output_file.flv
 @end verbatim
 
+There are a number of options for embedding the flv file in a web page. 
+You can use ming or flv2swf to create an swf file. @*
+@uref{http://klaus.geekserver.net/flash/streaming.html} has detailed instructions 
+for ming and @uref{http://search.cpan.org/~clotho/FLV-Info-0.17/bin/flv2swf} 
+can be installed with cpan> install FLV::ToSWF. Or you can use the Creative Commons 
+Non-Commercial licenced JW FLV Player
+@uref{http://www.jeroenwijering.com/?item=JW_FLV_Player}, or the Apache Licenced 
+FlowPlayer @uref{http://flowplayer.org}. Both of these allow you to use the flv 
+as created above, and have controls for stopping and playing the movie etc.
+
 @c cincvdoc_node_number_328
 @node Quicktime for GNU/Linux compatibility chart
 @section Quicktime for GNU/Linux compatibility chart
@@ -8505,17 +8522,44 @@ different than its compatibility with files rendered from an HDV project.
 @cindex Rendering to mpeg2
 @cindex Mpeg2, rendering to
 
-Here is a method to export mpeg2 video and make a single chapter DVD@.  This
-method allows you to precisely set the encoding option you want and produces an
+@menu
+* yuv4mpeg pipe through mpeg2enc::
+* yuv4mpeg pipe through ffmpeg::
+@end menu
+
+Here is a method to export mpeg2 video for DVD.
+This method allows you to precisely set the encoding option you want and produces an
 mpeg2 file which is 100% compatible with all DVD standalone players.
+For how to make a DVD from the output @xref{Authoring a DVD}.
+
+Audio and video are rendered seperately and combined later in a procedure external 
+to Cinelerra. @*
+@b{Audio} is rendered into @b{.ac3}, and @b{video} is rendered into a
+@b{yuv4mpeg stream} which is piped through either @b{mpeg2enc} or @b{ffmpeg} into a 
+@b{.m2v} file. Both variants are described in detail below. 
+
+(Apparently depending on footage and player engine, one or the other variant may 
+produce better results. Check out which one works best for you by rendering a short 
+test edit of a few seconds length, authoring to DVD according to the sections below, 
+and playing it in your cheapest standalone player to really see wether it is foolproof 
+or displays errors.) 
+	 
+In both cases, make sure you properly defined your Cinelerra project format before 
+rendering your video (menu @b{Settings->Format...}), preferably even before loading 
+any raw footage. @*
+@b{TV standards:}@*
+@b{PAL} is 720x576 at 25 frames per second, @*
+@b{NTSC} is 720x480 at 29.97 frames per second.
+
+@c cincvdoc_node_number_363
+@node yuv4mpeg pipe through mpeg2enc
+@subsubsection yuv4mpeg pipe through mpeg2enc
+@cindex yuv4mpeg pipe through mpeg2enc
+@cindex mpeg2enc, yuv4mpeg pipe
 
 The mplex program from @b{mjpegtools} must be installed.  The mjpegtools
 package is built in the hvirtual distribution and the mplex utility may be
 extracted from there.
-
-First, make sure you properly defined your cinelerra project format before
-rendering your video (menu @b{Settings->Format}).  PAL is 720x576 at 25 frames
-per second, and NTSC is 720x480 at 29.97 frames per second.
 
 @enumerate 1
 @item Create a script @file{~/cine_render.sh}
@@ -8525,7 +8569,7 @@ per second, and NTSC is 720x480 at 29.97 frames per second.
 -b 8600 -f 8 -o $1}
 @item Put the execute permissions on that file:
 @command{chmod 777 ~/cine_render.sh}
-@item Open cinelerra, and select the part of the video you want to render with
+@item Within Cinelerra, and select the part of the project you want to render with
 the [ and ] points
 @item Press @kbd{SHIFT-R}
 @item Select the @b{YUV4MPEG Stream} file format
@@ -8578,6 +8622,59 @@ Please read the mjpegtools'manual and subscribe to its mailing-list for more
 information.
 @end itemize
 
+@c cincvdoc_node_number_364
+@node yuv4mpeg pipe through ffmpeg
+@subsubsection yuv4mpeg pipe through ffmpeg
+@cindex yuv4mpeg pipe through ffmpeg
+
+@enumerate 1
+@item Select @b{File->Render...} or press @key{SHIFT-R}. The render dialog pops up. 
+@item In the render dialog, you have the choice to render 1. the entire project, or 
+2. the highlighted selection, or 3. from In-point "[" to Out-point "]".
+@item Make sure the @b{Insertion strategy} is "Create new resources only".
+@item Select the @b{AC3} audio output file format.
+@item Specify the audio output file name and path (example:
+@command{your-movie.ac3}).
+@item Select @b{Render audio tracks} and deselect @b{Render video tracks}.
+@item Click on the wrench next to "Audio:". A new dialog "Cinelerra: Audio Compression" 
+pops up.
+@item Set the bitrate to @b{128 kbps} (or leave it there).
+@item Click OK, the compression dialog disappears.
+@item In the render dialog, click OK, the dialogu disappears. Audio is rendered. 
+Rendering audio is much faster than rendering video but might still take some seconds. 
+Watch the progress bar in the main window's lower right corner.
+@item Again, press @key{SHIFT-R}. The render dialog pops up again.
+@item Select the @b{YUV4MPEG Stream} file format.
+@item Specify the video output file name and path (example:
+@command{your-movie.m2v}).
+@item Deselect @b{Render audio tracks} and select @b{Render video tracks}.
+@item Click on the wrench next to "Video:". A new dialog window "Cinelerra: YUV4MPEG 
+stream" pops up. The first textbox should already contain the output filename and path 
+you had specified in the render dialog.
+@item Select "Use Pipe:".
+@item Fill the following command line into the second textbox: @*
+@command{ffmpeg -f yuv4mpegpipe -i - -y -target dvd -flags +ilme+ildct %}
+@item Click OK in the yuv4mpeg dialog and in the render dialog to render video output.
+@item The resulting .m2v can be further processed together with the .ac3 audio with 
+the following shell command, producing a dvd-compatible mpeg stream:@*
+@command{ffmpeg -i your-movie.ac3 -i your-movie.m2v -target dvd -flags
++ilme+ildct your-movie.mpg} (Yes, the stream is sent through ffmpeg a second time.)
+@end enumerate
+
+Note on ffmpeg command line options:@*
+@command{-i} tells ffmpeg to read from standard input (in our pipe, this means from 
+Cinelerra's render stream).@*
+The @command{-y} option allows to overwrite existing target files (of course, it is 
+safer to omit this, but then you must make sure to rename or delete previous results 
+each time you want to render a new version).@*
+The @command{+ilme+ildct} flags are for proper interlacing, bottom fields first, tested 
+with PAL footage. Some Cinelerra versions suggest a similar command line in the ffmpeg 
+pipe presets for DVD, however with erroneous syntax of the interlacing flags or 
+without the flags.
+
+Before proceeding to put your rendered mpeg2 data on DVD, you might want to watch and 
+check your-movie.mpg in mplayer or xine/kaffeine.
+			
 @c cincvdoc_node_number_265
 @node Making a DVD menu
 @subsection Making a DVD menu
@@ -9780,6 +9877,10 @@ and press @b{Play} on the camcorder.  You should not run any heavy ressources
 consuming task on your computer since the lack of caching in test-mpeg2 causes
 framedrops.
 
+New version of dvgrab seems to support HDV. Minimal example:@*
+Syntax:@*
+@command{dvgrab -format mpeg2 myclip}
+
 @c cincvdoc_node_number_345
 @node Using TOC and WAV files
 @subsection Using TOC and WAV files
@@ -9829,6 +9930,8 @@ Cinelerra "Save", some problem can occur.  Sometimes the tags are not closed,
 ACODEC contains some \001 characters.  Edit the file manually or use the
 following command:@*
 @command{cat temp001.xml| tr -d `\001` > /tmp/1 ; mv /tmp/1 temp001.xml}
+
+Update: Recent version of Cinelerra seems to produce valid XML.
 
 @c cincvdoc_node_number_348
 @node Rendering the HDV project
