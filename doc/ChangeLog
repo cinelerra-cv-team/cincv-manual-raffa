@@ -1,11 +1,32 @@
 
+2007-10-07 raffa <raffaella.traniello@livecom.it>
+    
+    * 1.50.EN
+
+    Updated edition number
+    
+    Chapter 2: Installation    
+    - Change mmx to mmx32 for 32 bit Pentiums (by karrak)
+    - Add Marillat repository and delete obsolete information (by cosmo)
+    
+    Chapter 6: Program window    
+    - Added description of the Label tab of the Resources window
+    
+    Chapter 20: Rendering files
+    - Adding information on converting flv file to swf and more detail on using flv movie players (by cillian)
+    - Added subsubsection yuv4mpeg pipe through mpeg2enc (node 363) (by kurts-film)
+    - Added subsubsection yuv4mpeg pipe through ffmpeg (node 364) (by kurts-film)
+    
+    Chapter 21: Tips
+    - Added notes on HDV (new dvgrab HDV support and valid XML in recent version of Cinelerra) (by Marcin Kostur)
+    
+
 2007-09-27 Raffaella Traniello
 
      * 1.49.EN 
 
 	Chapter 14 Realtime Effects
-
-	Included changes from the following svn commits:
+	- Included changes from the following svn commits:
 	r1027: Updated Videoscope doc. Added 2 images (manual_images_intl). Patch by Craig Lawson.
 	r1028: Documentation for RGB-601 effect. Patch by Craig Lawson.
 	r1033: Update Threshold documentation. Patch by Craig Lawson.
