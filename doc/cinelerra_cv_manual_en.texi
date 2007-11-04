@@ -15,7 +15,7 @@
 @documentencoding ISO-8859-1
 @settitle Cinelerra CV Manual
 @afourpaper
-@set EDITION 1.50.EN
+@set EDITION 1.51.EN
 @set VERSION 2.1
 
 @finalout
@@ -201,29 +201,35 @@ combined the original "Secrets of Cinelerra" with the contents from Alex @sc{Fer
 Wiki into a unified document.
 
 Cinelerra-CV documentation maintainers:@*
-English: Nicolas @sc{Maufrais} (coordinator)@*
-French: Jean-Luc @sc{Coulon}
+English: Nicolas @sc{Maufrais} (coordinator), Raffaella @sc{Traniello}
+(apprentice sorcerer)@*
+
+Manual translators:
+French: Jean-Luc @sc{Coulon}@*
+Brazilian Portuguese: Flavio @sc{Soares} (maintainer), Willie @sc{Marcel}@*
+Spanish: Alberto @sc{Ramallo}, Gustavo I@~niguez @sc{Goya} (chapter 17 - Keyframes)
 
 Other contributors: Alexandre @sc{Bourget}, Kevin @sc{Brosius}, Carlos @sc{Davila}, 
 Cillian @sc{de Roiste}, Rafael @sc{Diniz}, Pierre @sc{Dumuid}, Mike @sc{Edwards}, 
-Martin @sc{Ellison}, Graham @sc{Evans}, Scott @sc{Frase}, Joe @sc{Friedrichsen}, 
-Gus Gus, Terje @sc{Hanssen}, Mikko @sc{Huhtala}, Ben @sc{Jorden}, Nathan @sc{Kidd}, 
-Marcin @sc{Kostur}, Joseph @sc{L.}, Valentina @sc{Messeri}, Sean @sc{Pappalardo},
-Herman @sc{Robak}, Dana @sc{Rogers}, Jim @sc{Scott}, Andraz @sc{Tori}, Raffaella
-@sc{Traniello}, Hermann @sc{Vosseler}
+Martin @sc{Ellison}, Graham @sc{Evans}, Alex @sc{Ferrer}, Scott @sc{Frase}, Joe
+@sc{Friedrichsen}, gour, Gus Gus, Terje @sc{Hanssen}, Mikko @sc{Huhtala}, Ben @sc{Jorden}, 
+Nathan @sc{Kidd}, Marcin @sc{Kostur}, Joseph @sc{L.}, David @sc{McNab}, Valentina @sc{Messeri}, 
+Sean @sc{Pappalardo}, Herman @sc{Robak}, Dana @sc{Rogers}, Jim @sc{Scott}, Andraz @sc{Tori}, 
+Raffaella @sc{Traniello}, Hermann @sc{Vosseler}.
 
 Thanks to the GNU project team, and particularly to Karl @sc{Berry}, maintainer
 of GNU Texinfo, for the precious help he gave us during the elaboration of this
 manual.
 
-@itemize
-@item To fetch the manual sources, install cogito and git-core on your computer 
+To fetch the manual sources, install git-core on your computer 
 and run:@*
-@command{cg-clone git://scm.pipapo.org/cinelerra/nicolasm}
-@item You can participate on editing this manual by making changes in the
+
+FIXME
+
+You can participate on editing this manual by making changes in the
 Cinelerra-CV wiki:@*
 @uref{http://cvs.cinelerra.org/docs/wiki/doku.php}
-@end itemize
+
 
 @ifnotplaintext
 @ifnothtml
@@ -799,11 +805,27 @@ You will need to apt-get install the following packages:
 @subsection Ubuntu packages repositories
 @cindex Ubuntu packages repositories
 
+@b{For Ubuntu 7.10 Gutsy Gibbon:}
+
+@itemize @bullet
+
+@item for i386, by Valentina @sc{Messeri}:
+@verbatim
+deb http://giss.tv/~vale/ubuntu32 ./
+@end verbatim
+
+@item for AMD64 (and also Core Duo Intel64), by Valentina @sc{Messeri}:
+@verbatim
+deb http://giss.tv/~vale/ubuntu64 ./
+@end verbatim
+
+@end itemize
+
 @b{For Ubuntu 7.04 Feisty Fawn:}
 
 @itemize @bullet
 
-@item optimised for UbuntuStudio, with OpenGL, by Valentina @sc{Messeri}:
+@item for i386, optimised for UbuntuStudio, with OpenGL, by Valentina @sc{Messeri}:
 @verbatim
 deb http://giss.tv/~vale/ubuntuopengl/ ./
 @end verbatim
@@ -813,7 +835,7 @@ deb http://giss.tv/~vale/ubuntuopengl/ ./
 deb http://giss.tv/~vale/ubuntu64 ./
 @end verbatim
 
-@item for 64 bits, with OpenGL disabled, by Valentina @sc{Messeri}:
+@item for AMD64, with OpenGL disabled, by Valentina @sc{Messeri}:
 @verbatim
 deb http://giss.tv/~vale/ubuntu64NOopengl/ ./
 @end verbatim
@@ -956,19 +978,27 @@ Installation for Gentoo GNU/Linux is very straight forward. Simply type:
 @verbatim
 emerge cinelerra-cvs
 @end verbatim
-as root and it should install and run with no problems.  Note that you may need
-to put cinelerra in your @file{/etc/portage/package.keywords} file in order to
-use it:
+as root and it should install and run without any problems.  Note that you may need
+to put cinelerra-cvs in your @file{/etc/portage/package.keywords} file in order to
+unmask it:
 @verbatim
-echo "=media-video/cinelerra-cvs-20061020" >> /etc/portage/package.keywords
+echo "=media-video/cinelerra-cvs ~x86" >> /etc/portage/package.keywords
 @end verbatim
 
 See @uref{http://www.gentoo.org/doc/en/handbook/handbook-x86.xml?part=3&chap=3} 
-for details. 
+for details. If you are running on an architecture other than x86 e.g. amd64, you 
+will need to replace ~x86 with the relevant architecture e.g. ~amd64.
 
-@b{Note:} The Gentoo ebuild media-video/cinelerra-cvs-20061020 has no editing
-modes icons.  @xref{Editing modes}, for more
-information.
+You may also want to adjust the USE flags. First run @*
+@verbatim
+emerge -av cinelerra-cvs
+@end verbatim
+to see what flags are available and then add the relevant ones to 
+@file{/etc/portage/package.use}: @*
+@verbatim
+echo "media-video/cinelerra-cvs ieee1394" >> /etc/portage/package.use 
+@end verbatim
+This would enable support for firewire devices.
 
 @c cincvdoc_node_number_326
 @node Fedora
@@ -2813,9 +2843,11 @@ It must be said that since an XML file is a text file, you can always repair bro
 media linkage by editing the XML file in a text editor. For every media you 
 moved, search for the old path and replace it with the new one. Don't forget to 
 make a backup copy of your XML file before doing any editing!@*
-You can replace the path of every asset also within the program, by entering the
-new location in the @b{Asset info} window. To open this window, right click on
-the asset in the Resources window and choose @b{Info...} in the popup menu.
+You can replace the path of every asset whose source file you moved also within the 
+program, by entering the new location in the @b{Asset info} window. 
+To open this window, right click on the asset in the Resources window and choose 
+@b{Info...} in the popup menu. Directly type the path in the first field of the
+dialog or click on the magnifier on the right to browse your files.
 Operating from the GUI is convenient only when a very small number of changes is needed.
 
 XML files are useful in saving the current state of Cinelerra before retiring 
@@ -3103,6 +3135,8 @@ drop mode, the highlighted area overrides the in/out points.  If a highlighted
 area and in/out points are set, the highlighted area is affected by editing 
 operations and the in/out points are ignored.  If no region is highlighted, 
 the in/out points are used.
+To avoid confusion, it is better to use either highlighting or in/out points but 
+not both simultaneously.
 
 Normally, in/out points do not affect the playback region.  The in/out points
 determine the playback region only if you hold down @key{CTRL} while issuing a
@@ -3112,9 +3146,18 @@ To set in/out points, go to the timebar and position the insertion point
 somewhere.  Select the @image{manual_images_intl/in_point_button,5mm} @b{in point button}.
 Move the insertion point to a position after the in point and click the
 @image{manual_images_intl/out_point_button,5mm} @b{out point button}.
+Instead of using the button bar, you can use the @key{[} and @key{]} keys to
+toggle in/out points.
 
 @center @image{manual_images_intl/inout_points,160mm}
 @center @b{Timebar with in/out points set}.
+
+If you set the insertion point somewhere else while in/out points already exist, when 
+you click the in/out buttons the existing points will be repositioned.
+
+If you click on in/out points while a region is highlighted, the insertion point
+will be ignored and in/out points will be set at the beginning and at
+the end of the highlighted area.
 
 If you select either the in point or the out point, the insertion point will jump to
 that location.  After selecting an in point, if you click the @b{in point button}
@@ -3127,21 +3170,9 @@ click will set a new point or reposition an old one at the insertion point; the
 second click will delete it.  Obviously this trick does not work if the in point 
 or the out point is already set at insertion point.
 
-If you select a region somewhere else while in/out points already exist, 
-the existing points will be repositioned when you click the in/out buttons.
-
 @key{SHIFT}-clicking on an in/out point highlights the region between the
 insertion point and that in/out point.  If a region is already highlighted, it
 extends the highlighted region up to that in/out point.
-
-Instead of using the button bar, you can use the @key{[} and @key{]} keys to
-toggle in/out points.
-
-In both cut and paste editing mode and drag and drop editing mode, in/out
-points override the highlighted area.  If a highlighted area and in/out points
-are set, the highlighted area affects playback while the in/out points affect
-editing operations.  To avoid confusion, it is better to use either highlighting
-or in/out points but not both simultaneously.
 
 The insertion point and the in/out points allow you to define an affected
 region, but they do not let you jump to exact points on the timeline very easily.
@@ -4363,32 +4394,42 @@ numeric entry.
 @subsection Cropping
 @cindex Cropping
 
-Cropping changes the value of the output dimensions and the projector to reduce
-the visible picture area.  Enable the @image{manual_images_intl/crop,4.33mm} crop toggle
-and the @image{manual_images_intl/toolwindow,2.67mm} tool window in the @b{compositing
+Cropping reduces the visible picture area of the whole project.@*
+It changes the values of the output dimensions (width and height in pixels) 
+and the X Y values of the projector in a single operation. @*
+Since it changes project settings it affects all the tracks for their
+entire duration and it is not keyframable.
+
+Enable the @image{manual_images_intl/crop,4.33mm} crop toggle and the 
+@image{manual_images_intl/toolwindow,2.67mm} tool window in the @b{compositor
 window} to display the @b{Crop control dialog box}.
 
 @center @image{manual_images_intl/compositor_crop_tool,60mm}
 @center @b{Crop control dialog box}
 
 Click-drag anywhere in the video to define the crop area.  This draws a
-rectangle over the video.  Click-drag anywhere in the video to start a new
-rectangle.  Click-drag over any corner of the rectangle to reposition the
-corner.
+rectangle over the video. @*
 
 @center @image{manual_images_intl/compositor_crop}
 @center @b{Crop area defined}
 
-@b{ALT-click} in the cropping rectangle to translate the rectangle to any
-position without resizing it.
-
-The tool window allows text entry of the coordinates and executes the cropping
-operation.  When the rectangle is positioned, hit the @b{do it} button in the
-tool window to execute the cropping operation.
-
-@b{Note:} The X1,Y1 & X2,Y2 coordinates on the crop control dialog allows text
-entry of the top left and bottom right coordinates that define the crop
+Click-drag anywhere in the video to start a new rectangle.  @*
+Click-drag over any corner of the rectangle to reposition the corner.@*
+ALT-click in the cropping rectangle to translate the rectangle to any
+position without resizing it.@*
+The crop control dialog allows also text entry of the top left coordinates
+(X1,Y1) and bottom right coordinates (X2,Y2) that define the crop
 rectangle.
+
+When the rectangle is positioned, hit the @b{Do it} button in the crop control 
+dialog to execute the cropping operation: the portion of the image outside
+the rectangle will be cut off and the projector will make the output fit the
+canvas.@*
+The @b{Set Format} window will show the new project Width and Height values.@*
+The projector tool window will show the new X Y values.@*
+Track size will remain unchanged.@*
+To undo the cropping enter the original project dimensions in the @b{Set Format}
+window and click on @b{Reset projector} in the popup menu of the compositor.
 
 @c cincvdoc_node_number_126
 @node Safe regions
