@@ -1,3 +1,27 @@
+2007-11-04 raffa <raffaella.traniello@livecom.it>
+    
+    * 1.51.EN
+
+    Chapter 1: Introduction
+    - Updated edition number
+    - Reordered and updated the list of contributors
+    - Deleted cogito from the list of application needed to fetch the manual sources
+    - Replaced out of date command for fetching manual sources with FIXME
+    
+    Chapter 2: Installation
+    - Rescued forgotten changes about Gentoo installation made by Cillian on Dokuwiki
+    - Added Ubuntu Gutsy repos by Valentina Messeri
+    
+    Chapter 5: Saving project files
+    - Added details to for fixing media linkage via GUI.
+    
+    Chapter 6: Program Window
+    - Deleted contradictory informations about in/out points and highlighted areas.
+    - Added notes on setting in/out points on highlighted areas.
+    
+    Chapter 8: Compositor window
+    - Added details about cropping and reordered content
+    
 
 2007-10-07 raffa <raffaella.traniello@livecom.it>
     
