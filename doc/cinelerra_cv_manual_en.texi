@@ -15,7 +15,7 @@
 @documentencoding ISO-8859-1
 @settitle Cinelerra CV Manual
 @afourpaper
-@set EDITION 1.52.EN
+@set EDITION 1.53.EN
 @set VERSION 2.1
 
 @finalout
@@ -833,14 +833,15 @@ deb http://repository.akirad.net akirad-gutsy main
 @end verbatim
 
 Notes:@*
-- You also need to add an authentication key by typing:@*
+-Installations from this repository need an authentication key. Add it by 
+  typing the following command in your terminal:@*
 @command{wget -q http://repository.akirad.net/dists/akirad.key -O- | sudo
 apt-key add -}@*
-- These packages set shmmax to 0x7fffffff and add Cinelerra language support on
-  Ubuntu.@*
-- You can use these variants:@*
+- Cinelerra package is available in 5 variants:@*
 cinelerra (no opengl) - cinelerra-generic (with opengl) - cinelerra-k8 (with 
 opengl) - cinelerra-k7 (no opengl)@*
+- These packages set shmmax to 0x7fffffff and add Cinelerra non-English language 
+  support on Ubuntu.@*
 - Please, report any package bug to akir4d at gmail dot com
   
 @item for i386 (not working on amd 32 bits), by Valentina @sc{Messeri}:
