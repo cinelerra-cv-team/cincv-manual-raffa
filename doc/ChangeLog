@@ -1,3 +1,66 @@
+2008-02-09 raffa <raffaella.traniello@livecom.it>
+    
+    Update doc/texinfo.tex to the latest release (04.02.08)
+    
+   
+2008-01-28 raffa <raffaella.traniello@livecom.it>
+    
+    * 1.53.EN
+    Chapter 1: Introduction
+    - Updated edition number
+    
+    Chapter 2: Installation
+    - Improved Ubuntu package description
+    
+    
+2008-01-06 raffa <raffaella.traniello@livecom.it>
+    
+    * 1.52.EN
+    Chapter 1: Introduction
+    - Updated edition number
+    - Added Iñaki Larrañaga Murgoitio “Dooteo” as Basque translator.
+    - Added Paolo Rampino in the contributors' list
+    - Added a reference to doc/TRANSLATIONS for translators
+    - Pointed to doc/README_en for instructions for building the manual in other formats
+    - Pointed to SVN to get the manual sources.
+    - Added a tutorial and a miscellany link
+    
+    Chapter 2: Installation
+    - Added ldconfig in the commands for compilation
+    - Fixed typo mmx32
+    - Added ArtistX live CD (by cillian)
+    - Added Musix live CD
+    - Added Ubuntu Gutsy repos by Paolo Rampino (by cillian and akirad)
+    - Added details about libfaac version for ubuntu 64 (by cillian)
+    - Added 2 Howtos for compilation in Ubuntu Gutsy
+    - Minor changes
+    
+    Chapter 3: Configuration
+    - How to localize Cinelerra on distributions with only UTF-8 support (by Paolo Rampino)
+    
+    Chapter 6: Program Window
+    - Added a note about sample zoom
+    - Added details about the label info dialog
+    - Added notes on patchbay attributes Mute track and Fader
+    - Reordered content (selection of multiple files)
+    - Added a list of editing operations
+    - Minor changes
+    
+    Chapter 21: Tips
+    - Note about creating charset for localizing Cinelerra on distributions with only UTF-8 support (by Paolo Rampino)
+    - Added node 365 about creating DVD video from Lower Quality Footage (by aum)
+    
+    
+2008-01-06 raffa <raffaella.traniello@livecom.it>
+    
+    * doc/TRANSLATIONS - Update
+    Added details to the translation process.
+    Set the Cinelerra CV community as reference for translators.
+       
+    * README_EN Updated
+    Added details in the description of the building of the Manuals from texinfo to all the available formats.
+    
+
 2007-11-04 raffa <raffaella.traniello@livecom.it>
     
     * 1.51.EN

@@ -15,7 +15,7 @@
 @documentencoding ISO-8859-1
 @settitle Cinelerra CV Manual
 @afourpaper
-@set EDITION 1.53.EN
+@set EDITION 1.54.EN
 @set VERSION 2.1
 
 @finalout
@@ -129,6 +129,12 @@ retouch many generations of footage, which makes Cinelerra very complex.
 Consumers should consider other tools such as Avidemux (@uref{http://www.avidemux.org/}), 
 Kino (@uref{http://kinodv.org/}) or Kdenlive (@uref{http://kdenlive.org/}).
 
+Quote from Miro's Wiki (@uref{http://www.mitvwiki.org/Cinelerra}):@*
+"The key difference between Cinelerra and many of the commercial editors is that 
+Cinelerra hides much less from the user, exposing much of the inner workings to 
+direct interaction. This can be harder to use, but does make it tremendously powerful,
+and for some operations blistering fast."
+
 @c cincvdoc_node_number_4
 @node The two versions of Cinelerra
 @section The two versions of Cinelerra
@@ -218,7 +224,7 @@ Martin @sc{Ellison}, Graham @sc{Evans}, Alex @sc{Ferrer}, Scott @sc{Frase}, Joe
 @sc{Friedrichsen}, gour, Gus Gus, Terje @sc{Hanssen}, Mikko @sc{Huhtala}, Ben @sc{Jorden}, 
 Nathan @sc{Kidd}, Marcin @sc{Kostur}, Joseph @sc{L.}, David @sc{McNab}, Valentina @sc{Messeri}, 
 Sean @sc{Pappalardo}, Paolo @sc{Rampino}, Herman @sc{Robak}, Dana @sc{Rogers}, Jim @sc{Scott}, Andraz @sc{Tori}, 
-Raffaella @sc{Traniello}, Hermann @sc{Vosseler}.
+Raffaella @sc{Traniello}, Hermann @sc{Vosseler}, Norval @sc{Watson}.
 
 Thanks to the GNU project team, and particularly to Karl @sc{Berry}, maintainer
 of GNU Texinfo, for the precious help he gave us during the elaboration of this
@@ -293,6 +299,9 @@ by Laurent @sc{Bellegarde}@*
 @uref{https://docs.indymedia.org/view/Sysadmin/Cinelerra}
 @item @b{Tutorial Cinelerra}, in Portuguese, by Leo @sc{Germani}@*
 @uref{http://www.estudiolivre.org/tiki-index.php?page=Cinelerra}
+@item @b{Cinelerra is very easy}, Introduction to Cinelerra, for beginners, by
+Paolo @sc{Rampino} @*
+@uref{http://project.akirad.net/node/12}
 @end itemize
 
 @c cincvdoc_node_number_358
@@ -318,6 +327,12 @@ projects.@*
 @item @b{SimAV's HOWTOs}, by Simeon @sc{Volkel} - How to create a picture in picture 
 effect, How to create overlays, How to change theme.@*
 @uref{http://g-raffa.eu/SimAV/}
+@item @b{Tips for Transcoding Cinelerra Compatible Video with FFmpeg,
+MEncoder}, by Alexander @sc{Grundner} @*
+@uref{http://www.alexandergrundner.com/2007/07/19/tips-for-transcoding-cinelerra-compatible-video-with-ffmpeg-mencoder}
+@item @b{FMPEG compatibility} - HOWTO produce videos that can be played in common 
+proprietary multimedia players@*
+@uref{http://ffmpeg.mplayerhq.hu/compat.html}
 @end itemize
 
 @c cincvdoc_node_number_10
@@ -327,6 +342,8 @@ effect, How to create overlays, How to change theme.@*
 
 Miscellaneous links:
 @itemize @bullet
+@item @b{Interlacing}@*
+@uref{http://neuron2.net/LVG/interlacing.html}
 @item @b{What is Deinterlacing? Facts, solutions, examples}@*
 @uref{http://www.100fps.com}
 @item @b{MPEG-2 FAQ}@*
@@ -337,6 +354,11 @@ Miscellaneous links:
 @uref{http://lipas.uwasa.fi/~f76998/video/conversion}
 @item @b{Colour specification and image coding}@*
 @uref{http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html}
+@item @b{DVD Video} - about DVD structure @*
+@uref{http://wlug.org.nz/DVDVideo}
+@item @b{Creating DVD videos on Linux and Unix} - an excellent high level overview of 
+DVD authoring in general on Linux @*
+@uref{http://womble.decadent.org.uk/talks/dvd-ukuug06/dvd-talk-ukuug06-paper.html}
 @item @b{lprod - Libre Production} a French Wiki full of resources for Open
 Source video editing, especially for Cinelerra HV (among them an Ubuntu package)@*
 @uref{http://fr.lprod.org/wiki/doku.php}
@@ -2455,8 +2477,13 @@ frame of the video. No table of contents is created. @xref{Images sequence}.
 @cindex Still images size
 
 Imported images always stay at their original size.  Therefore,
-you have to take into account the aspect ratio of your video in Cinelerra and
-rescale your pictures before importing them in Cinelerra.@*
+you may need to scale your pictures before importing them in Cinelerra.@*
+For resizing your picture to fit the project size you can use Imagemagick 
+(@uref{http://www.imagemagick.org/script/index.php})@*   
+Example:@* 
+@command{convert inputfile.jpg -resize 720x576 outputfile.jpg}@*
+
+You have to take into account the aspect ratio of your video. 
 For example, PAL images aspect ratio is 4/3, but 720x576 is 5/4.  For your
 imported images to be displayed correctly, you have to rescale their horizontal
 size:@*
@@ -2464,11 +2491,14 @@ new horizontal size=@math{(5 / 4) / (4 / 3)} x original horizontal size@*
 For PAL videos, you have to multiply the horizontal size of the pictures you
 want to import by a factor of 0.9375.@*
 Here is a small shell script which, when ran from a folder containing jpg
-images, resize those images and put the new images in a @file{resized} folder:
+images, resize those images and put the new images in a @file{resized} folder:@*
+Note: Make sure you have installed Imagemagick which provides the functions 
+'identify' and 'convert' used in the script.
+
 @verbatim
 #/bin/sh
 mkdir resized
-for element in `ls . | grep jpg`;
+for element in `ls . | grep -i '\.jpe*g$\'`;
 do
     size=`identify ${element}`
     width=`echo ${size} | sed '+s+.*JPEG ++' | sed '+s+x.*++'`
@@ -2479,8 +2509,9 @@ done
 @end verbatim
 
 When the size of your image is different from the size of your project, but the
-ratio is the same, you might want to keep the image on a separate track and adjust the display 
-of it with the camera zoom. @xref{The camera and projector}.
+ratio is the same, you might want to keep the image at its original size, to
+load it on a dedicated track and adjust the display of it with the camera zoom.
+@xref{The camera and projector}.
 
 @c cincvdoc_node_number_69
 @node Open EXR images
@@ -2630,10 +2661,20 @@ or something similar.  Then load @file{dvd.toc}.
 @node MPEG 1 audio
 @subsection MPEG 1 audio
 @cindex MPEG 1 audio
+@cindex .mp2
+@cindex .mp3
 
-These are .mp2 and .mp3 files.  If the files are encoded using a fixed bitrate, 
-they can be loaded directly with no table of contents.  Variable bitrate streams 
-need to have a table of contents created with mpeg3toc.
+MPEG 1 audio files have .mp2 and .mp3  extension. If the files are encoded using a 
+fixed bitrate, they can be loaded directly on Cinelerra. Otherwise a table of 
+contents (TOC) needs to be created and loaded as resources in place of the audio file. 
+If you know your audio stream has variable bitrate or if you see Cinelerra can't 
+seek and playback your file properly, you must create the TOC using mpeg3toc.@* 
+Here is an example of command:@*
+@command{mpeg3toc -v /path/to/myfile.mp3 myfile.toc} @*
+@file{myfile.toc} is the Table of Contents that can be loaded as resource.@* 
+The path should be absolute unless you plan to always keep your .xml in the same 
+directory as the filename. For renderfarms the filesystem prefix should be / and the 
+movie directory mounted under the same directory on each node. 
 
 @c cincvdoc_node_number_75
 @node Ogg Theora/Vorbis
@@ -8592,11 +8633,11 @@ wide audience over the internet.
 
 @b{First pass:}
 @verbatim
-ffmpeg -i movie.mov -b 430 -s 320x240 -aspect 4:3 -pass 1 -ar 22050 movie.flv
+ffmpeg -i movie.mov -b 430k -s 320x240 -aspect 4:3 -pass 1 -ar 22050 movie.flv
 @end verbatim
 @b{Second pass:}
 @verbatim
-ffmpeg -i movie.mov -b 430 -s 320x240 -aspect 4:3 -pass 2 -ar 22050 movie.flv
+ffmpeg -i movie.mov -b 430k -s 320x240 -aspect 4:3 -pass 2 -ar 22050 movie.flv
 @end verbatim
 
 Pay attention to the output file extension.  Ffmpeg uses it to determine the
@@ -10095,21 +10136,6 @@ with mplex.
 @node Other issues
 @subsection Other issues
 @cindex HDV 1080i editing, other issues
-
-There are some problems with GOP cache in Cinelerra 2.1 which were not in the
-2.0 version. Many MPEG2 or MPEG4 files can not be played properly.  The HDV
-MPEG-2 playback is also affected.  Here is a quick solution to disable GOP
-caching.
-
-In @file{libmpeg3/video/seek.c}, at line #357, replace:
-
-@verbatim
-mpeg3video_drop_frames(video, frame_number - video->framenum, 1);
-@end verbatim
-by
-@verbatim
-mpeg3video_drop_frames(video, frame_number - video->framenum, 0);
-@end verbatim
 
 When playing MJPEG files, the dissolve transistion does not work properly in
 RGBA or YUVA modes but it works fine in RGB or YUV.
