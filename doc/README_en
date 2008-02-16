@@ -28,6 +28,7 @@ To build the Manuals the following applications have to be installed on your com
 texinfo
 TeX (for Debian or Ubuntu: tetex-bin and tetex-base)
 texi2html
+html2wiki (HTML::WikiConverter, for Ubuntu: is called libhtml-wikiconverter-perl)
 
 The manual can also be converted to Docbook, but you need the CVS version of
 texinfo to do so. The "stable" version of Texinfo cannot produce a correct
