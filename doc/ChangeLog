@@ -1,3 +1,25 @@
+2008-02-16 raffa <raffaella.traniello@livecom.it>
+    
+    * 1.54.EN
+    Chapter 1: Introduction
+    - Updated edition number
+    - Added a quote form Miro's Wiki about Cinelerra
+    - Added Norval Watson among the contributors
+    - Added Tutorial by Akirad and Howto on transcoding (by cillian)
+    - Added FFMPEG compatibility Howto and miscellaneous links on Interlacing and DVD-Video
+    
+    Chapter 5: Loading and saving files
+    - Modified script for resizing images (note by Helge Nert, ML)
+    - Added descriptions of Imagemagick resizing
+    - Added details to the MPEG1 audio section
+    
+    Chapter 20: Rendering Files
+    - Changed ffmpeg bitrate from -b 430 to -b 430k (by norv)
+    
+    Chapter 21: Tips
+    - Removed description of issues fixed by r1052 (by j6t)
+    
+
 2008-02-09 raffa <raffaella.traniello@livecom.it>
     
     Update doc/texinfo.tex to the latest release (04.02.08)
