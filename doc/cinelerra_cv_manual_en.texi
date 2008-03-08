@@ -15,7 +15,7 @@
 @documentencoding ISO-8859-1
 @settitle Cinelerra CV Manual
 @afourpaper
-@set EDITION 1.54.EN
+@set EDITION 1.55.EN
 @set VERSION 2.1
 
 @finalout
@@ -330,7 +330,7 @@ effect, How to create overlays, How to change theme.@*
 @item @b{Tips for Transcoding Cinelerra Compatible Video with FFmpeg,
 MEncoder}, by Alexander @sc{Grundner} @*
 @uref{http://www.alexandergrundner.com/2007/07/19/tips-for-transcoding-cinelerra-compatible-video-with-ffmpeg-mencoder}
-@item @b{FMPEG compatibility} - HOWTO produce videos that can be played in common 
+@item @b{FFMPEG compatibility} - HOWTO produce videos that can be played in common 
 proprietary multimedia players@*
 @uref{http://ffmpeg.mplayerhq.hu/compat.html}
 @end itemize
@@ -363,7 +363,7 @@ DVD authoring in general on Linux @*
 Source video editing, especially for Cinelerra HV (among them an Ubuntu package)@*
 @uref{http://fr.lprod.org/wiki/doku.php}
 @item @b{Cinelerra CV Glossary} for newbies@*
-@uref{http://g-raffa.eu/cin_glossary.html}
+@uref{http://g-raffa.eu/Cinelerra/cin_glossary.html}
 @end itemize
 
 @c cincvdoc_node_number_7
@@ -845,6 +845,40 @@ You will need to apt-get install the following packages:
 @subsection Ubuntu packages repositories
 @cindex Ubuntu packages repositories
 
+@b{For Ubuntu 8.04 Hardy Heron:}
+
+@itemize @bullet
+
+@item for all x86 (full working on 32 and 64 bits), by Paolo @sc{Rampino}:
+@verbatim
+deb http://repository.akirad.net akirad-hardy main
+@end verbatim
+
+Installation notes:@*
+- To add this repository in your sources list use the following terminal
+  command:@*
+@command{sudo wget http://repository.akirad.net/dists/hardy.list -O
+/etc/apt/sources.list.d/akirad.list}@*
+-Installations from this repository need an authentication key. Add it by 
+  typing the following command in your terminal:@*
+@command{wget -q http://repository.akirad.net/dists/akirad.key -O- | sudo
+apt-key add -}@*
+- Cinelerra package is available in 5 variants:@*
+cinelerra (x86 and x86_64 without opengl 2.0 video card)@*
+cinelerra-generic (all x86 and x86_64 with opengl 2.0 video card)@*
+cinelerra-k7 (amd32 without opengl 2.0 video card)@*
+cinelerra-k7gl (amd32 with opengl 2.0 video card)@*
+cinelerra-k8 (amd k8 optimized with opengl 2.0 video card)@*
+- Cinelerra must be set to work with PulseAudio. Open Cinelerra and go 
+to Settings->Preferences->Playback->Audio Driver. Select ESound and set the
+following parameters:@*
+Server:@*
+Port: 7007@*
+- These packages set shmmax to 0x7fffffff and add non-English language support
+  for Cinelerra.@*
+- Please, report any package bug to akir4d at gmail dot com
+@end itemize
+
 @b{For Ubuntu 7.10 Gutsy Gibbon:}
 
 @itemize @bullet
@@ -854,14 +888,21 @@ You will need to apt-get install the following packages:
 deb http://repository.akirad.net akirad-gutsy main
 @end verbatim
 
-Notes:@*
+Installation notes:@*
+- To add this repository in your sources list use the following terminal
+  command:@*
+@command{sudo wget http://repository.akirad.net/dists/gutsy.list -O
+/etc/apt/sources.list.d/akirad.list}@*
 -Installations from this repository need an authentication key. Add it by 
   typing the following command in your terminal:@*
 @command{wget -q http://repository.akirad.net/dists/akirad.key -O- | sudo
 apt-key add -}@*
 - Cinelerra package is available in 5 variants:@*
-cinelerra (no opengl) - cinelerra-generic (with opengl) - cinelerra-k8 (with 
-opengl) - cinelerra-k7 (no opengl)@*
+cinelerra (all x86 and x86_64 without opengl 2.0 video card)@*
+cinelerra-generic (all x86 and x86_64 with opengl 2.0 video card)@*
+cinelerra-k7 (all amd32 without opengl 2.0 video card)@*
+cinelerra-k7gl (all amd32 with opengl 2.0 video card)@*
+cinelerra-k8 (all amd64 with opengl 2.0 video card)@*
 - These packages set shmmax to 0x7fffffff and add Cinelerra non-English language 
   support on Ubuntu.@*
 - Please, report any package bug to akir4d at gmail dot com
@@ -1021,7 +1062,7 @@ installing the problematic library with the same method from the same webpage.
 @uref{https://help.ubuntu.com/community/CinelerraOnFeistyAMD64}
 
 @item Compilation from source code on Ubuntu 7.10 Gutsy Gibbon (for beginners):@*
-@uref{http://www.g-raffa.eu/cin_compilation.html}
+@uref{http://www.g-raffa.eu/Cinelerra/cin_compilation.html}
 
 @item Compilation from source code on Ubuntu 7.10 Gutsy Gibbon:@*
 @uref{http://lab.dyne.org/cinelerra/Gutsy}
@@ -1078,6 +1119,9 @@ Cinelerra is included in the Freshrpms repository at
 Freshrpms is to include the repository in the @b{yum} configuration. Also make
 sure that the Fedora Extras repository is enabled.  This is the case by default
 on Fedora 5 and 6, and Core and Extras are merged into one on Fedora 7.
+
+For Fedora 8 see
+@uref{http://kernelreloaded.blog385.com/index.php/archives/install-cinelerra-on-fedora-8/}
 
 On Fedora 6, as the user root do:
 @verbatim
@@ -2894,8 +2938,12 @@ operation, Cinelerra saves the current project to a backup in
 @file{$HOME/.bcast/backup.xml}.  In the event of a crash, the first thing you should do
 after restarting Cinelerra is select @b{File->Load backup} in order to load the backup.
 This will start Cinelerra at the point in your editing operations directly before the program
-crashed.  It is important after a crash to restart Cinelerra
-without performing any editing operations as you will overwrite the backup.
+crashed. @*
+It is important after a crash to restart Cinelerra without performing any editing operations 
+as you will overwrite the backup.@*
+Note that the backup.xml file is always an only file, also 
+when you are working with two instances of Cinelerra open at the same time. 
+In this case, the last operation made in whatever instance will overwrite the backup.
 
 @c cincvdoc_node_number_84
 @node Saving project files
@@ -7130,36 +7178,29 @@ Gimp and compositing them, the Titler allows you to add text from within
 Cinelerra.
 
 The titler has standard options for @b{font, size, and style}.  The best font
-is a generic, normal font like Arial in a large size. 
-
+is a generic, normal font like Arial in a large size. @*
 The titler also has options you will only find in moving pictures.  The
 @b{Justify} operation justifies the text relative to the entire frame.  Once
 justified, the @b{X and Y} offset is applied.  This allows text to be justified
-while at the same time letting you push it within the title safe region.
-
+while at the same time letting you push it within the title safe region.@*
 The @b{motion type} scrolls the text in any of the four directions.  When using
 this, the text may disappear.  Make sure the speed is set to a reasonably high 
 value (try 150) and move the insertion point along the timeline until the text 
-is far enough along the animation to reappear.  The text scrolls on and scrolls off.
-
+is far enough along the animation to reappear.  The text scrolls on and scrolls
+off.@*
 Setting @b{loop} causes the text to scroll completely off and repeat.  Without
-@b{loop} the text scrolls off and never reappears.
-
+@b{loop} the text scrolls off and never reappears.@*
 The speed of the animation is determined by @b{speed}, in pixels per second.  
-Set it higher to speed up the animation.
-
+Set it higher to speed up the animation.@*
 @b{Drop shadow} draws a black copy of the text to the bottom right of the
 original text.  This is useful when drawing text over changing video to keep
-the border always visible.
-
+the border always visible.@*
 In addition to the scrolling, @b{Fade in/Fade out} are a second type of
-animation.  If the fade seconds are 0, no fading is done.
-
+animation.  If the fade seconds are 0, no fading is done.@*
 @b{Color} picks the color to draw the text in.  Usually white is the only
-practical color.
-
+practical color.@*
 @b{Stamp timecode} replaces the text with the current position on the timeline
-in seconds and frames.
+in seconds and frames.@*
 
 Text options can only be applied to all the text as a whole. If you want your
 title text formatted with a mixture of fonts, sizes, styles, alignments etc. you
@@ -7181,6 +7222,11 @@ To create special effects for your title you can place it on a dedicated track
 and insert other realtime video effects just under the title effect or/and use
 camera and projector. Thanks to keyframing you can animate your title and make it 
 change position, size, colour, transparency, texture, shape over time.
+
+For improving playback performances of titles with effects, you can reduce the size 
+of the dedicated track. Right click on the track and select @b{Resize track...}. 
+Enter the smallest resolution that still keeps the title visible. For moving your title
+use the compositor projector.
 
 To included graphical elements like logos, you may want to import your title as
 a PNG image (alpha channel transparency is possible), move it with camera
@@ -7634,9 +7680,11 @@ Transitions may only apply to the matching track type.  Transitions under
 @b{audio transitions} can only apply to audio tracks.  Transitions under
 @b{video transitions} can only apply to video tracks.
 
-Load a video file and cut a section from the center so the edit point is
-visible on the timeline.  Go the resource window and click on the @b{Video
-transitions} folder.  Drag a transition from the transition list onto the
+Load two video files. Alternatively load a single video file and cut away a section 
+from the center so that you make two edits out of a single file. Make sure the
+edit boundary between the two edits is visible on the timeline.@*
+Go to the Resource window and click on the @b{Video transitions} folder.  
+Drag a transition from the transition list onto the
 second video edit on the timeline.  A box highlights over where the transition
 will appear.  Releasing it over the second edit applies the transition between
 the first and second edit.
@@ -7644,19 +7692,19 @@ the first and second edit.
 @center @image{manual_images_intl/drop_transition}
 @center @b{Dragging a dissolve transition to the timeline}
 
-You can now scrub@footnote{Scrubbing refers to moving backwards and forwards in
-time across a video or audio clip.} over the transition with the transport
-controls and watch the output in the @b{Compositor window}.  Scrubbing with the
-insertion point does not normally show transitions because the transition
-durations are usually too short.
+You can now scrub over the transition with the transport
+controls and watch the output in the @b{Compositor window}.  
 
 @cindex Detach Transitions
 @cindex Edit Transitions
 Once the transition is in place, it can be edited similarly to an effect.  Move
 the pointer over the transition and right click to bring up the transition
-menu.  The @b{show} option brings up specific parameters for the transition in
-question if there are any.  The @b{length} option adjusts the length of the
-transition in seconds.  Once these two parameters are set, they are applied to
+menu. @*
+The @b{show} option brings up specific parameters for the transition in
+question if any.@*
+The @b{length} option adjusts the length of the
+transition in seconds.@*
+Once these two parameters are set, they are applied to
 future transitions until they are changed again.  Finally, the @b{detach}
 option removes the transition from the timeline.
 
@@ -7665,39 +7713,36 @@ window can be really slow and tiring.  Fortunately, once you drag a transition
 from the Resource window, the @b{U} and @b{u} keys will paste the same
 transition.  The @b{U} key pastes the last video transition and the @b{u} key
 pastes the last audio transition on all the recordable tracks.  If the
-insertion point or in point is over an edit, the beginning of the edit is
+insertion point or the in point is over an edit, the beginning of the edit is
 covered by the transition.
+
+Transitions make two edits overlap for a certain amount of time. Some consumer 
+single track applications literally move backward the second edit to make it partially 
+overlay the first edit. This behavior is not possible on multitrack editors where the 
+synchrony among track is vital. Cinelerra don't move edits during transitions. Instead 
+it uses spare frames from the source file to lengthen the first edit enough to make it 
+overlap the second edit for the duration of the transition.@* 
+The exact point in time when the transition takes effect is the beginning of the second edit. 
+The transition lasts a set amount of time into the second edit. For example, if you set a 
+duration of 1 second for a dissolve transition, it @b{will not} start at the last 0.5 
+second of the first edit and continue 0.5 second into the second edit. In fact, it will 
+start exactly at the beginning of the second edit and last for 1 second into
+that second edit.@* 
+On the timeline a brown bar over the transition symbol visually represents the position and 
+the duration of the transition.@* 
+The most important consequence of this behavior is that the first asset needs to have enough 
+spare data after the end boundary to fill the transition into the second edit. Spare data 
+duration should be equal or greater than the length of the transition effect set
+in the @b{Length} parameter of the transition popup menu.@*  
+If the last frame shown on the timeline is the last frame of the source file Cinelerra will 
+lengthen the first edit using the last frame only, with the unpleasant result of having the
+first edit freezing into the transition.
 
 It should be noted that when playing transitions from the timeline to hardware
 accelerated video device, the hardware acceleration will usually be turned off
 momentarily during the transition and on after the transition in order to
 render the transition.  Using an un-accelerated video device for the entire
 timeline normally removes the disturbance.
-
-@b{Important:} The exact point in time when the transition takes effect is not
-straightforward.  It starts when the second edit begins and lasts a certain
-amount of time into the second edit.  Therefore, the first asset needs to have
-enough data after the edit point to fill the transition into the second edit.
-
-For example, the dissolve transition starts at the exact position where it is
-located on the timeline.  If you set a duration of 1 second for a dissolve
-transition, it @b{will not} start 0.5 second before the transition and continue
-0.5 second after that point.  In fact, it will start exactly where the
-transition is located on the timeline, and last for 1 second from that
-position.
-
-It is a common error to put a dissolve transition just after the last frame of
-an asset.  Let's imagine a dissolve transition is put between asset A and asset
-B, just after the last frame of asset A.
-
-Since the dissolve effect starts exactly at the position where it is located,
-there is no more frames from asset A to display when the dissolve transition
-starts.  Therefore, there is no other choice for Cinelerra than freezing the
-last frame of asset A and dissolving it with asset B.
-
-You have to make sure there is enough frames of asset A to be displayed when
-the dissolve transition starts.  The duration of those frames should be equal
-or greater than the length of the transition effect.
 
 @c cincvdoc_node_number_240
 @node Dissolve video transition
