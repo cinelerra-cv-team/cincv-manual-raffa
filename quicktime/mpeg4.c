@@ -7,7 +7,7 @@
 
 
 
-#include "avcodec.h"
+#include "libavcodec/avcodec.h"
 #include "colormodels.h"
 #include "funcprotos.h"
 #include "qtffmpeg.h"
@@ -671,7 +671,11 @@ static int encode(quicktime_t *file, unsigned char **row_pointers, int track)
 
         	context->b_quant_factor = 1.25;
         	context->b_quant_offset = 1.25;
+#if LIBAVCODEC_VERSION_INT < ((52<<16)+(0<<8)+0)
 			context->error_resilience = FF_ER_CAREFUL;
+#else
+			context->error_recognition = FF_ER_CAREFUL;
+#endif
 			context->error_concealment = 3;
 			context->frame_skip_cmp = FF_CMP_DCTMAX;
 			context->ildct_cmp = FF_CMP_VSAD;
@@ -1266,6 +1270,15 @@ void quicktime_init_codec_xvid(quicktime_video_map_t *vtrack)
         "XVID",
         "FFmpeg MPEG-4");
     result->ffmpeg_id = CODEC_ID_MPEG4;
+}
+
+void quicktime_init_codec_dnxhd(quicktime_video_map_t *vtrack)
+{
+    quicktime_mpeg4_codec_t *result = init_common(vtrack,
+        QUICKTIME_DNXHD,
+        "DNXHD",
+        "DNXHD");
+    result->ffmpeg_id = CODEC_ID_DNXHD;
 }
 
 // field based MPEG-4

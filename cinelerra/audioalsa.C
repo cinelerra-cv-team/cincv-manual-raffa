@@ -1,3 +1,24 @@
+
+/*
+ * CINELERRA
+ * Copyright (C) 2008 Adam Williams <broadcast at earthling dot net>
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * 
+ */
+
 #include "audiodevice.h"
 #include "audioalsa.h"
 #include "bcsignals.h"
@@ -271,7 +292,7 @@ int AudioALSA::open_input()
 	translate_name(pcm_name, device->in_config->alsa_in_device);
 //printf("AudioALSA::open_input %s\n", pcm_name);
 
-	err = snd_pcm_open(&dsp_in, pcm_name, stream, open_mode);
+	err = snd_pcm_open(&dsp_in, device->in_config->alsa_in_device, stream, open_mode);
 
 	if(err < 0)
 	{
@@ -300,7 +321,7 @@ int AudioALSA::open_output()
 
 	translate_name(pcm_name, device->out_config->alsa_out_device);
 
-	err = snd_pcm_open(&dsp_out, pcm_name, stream, open_mode);
+	err = snd_pcm_open(&dsp_out, device->out_config->alsa_out_device, stream, open_mode);
 
 	if(err < 0)
 	{

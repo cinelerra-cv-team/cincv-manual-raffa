@@ -2,8 +2,8 @@
 #define FFMPEG_H
 
 extern "C" {
-#include <avcodec.h>
-};
+#include <libavcodec/avcodec.h>
+}
 
 #include "asset.h"
 #include "guicast.h"
